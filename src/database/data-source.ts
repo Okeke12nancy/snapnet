@@ -1,11 +1,11 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
+import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-const dataSource: DataSourceOptions = {
+const dataSource = new DataSource({
   type: process.env.DB_TYPE as 'postgres',
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT, 10) || 5432,
@@ -17,13 +17,18 @@ const dataSource: DataSourceOptions = {
   synchronize: isDevelopment,
   migrationsTableName: 'migrations',
   ssl: process.env.DB_SSL === 'true',
-};
+});
 
-// export async function initializeDataSource() {
-//   if (!dataSource.isInitialized) {
-//     await dataSource.initialize();
-//   }
-//   return dataSource;
-// }
+export async function initializeDataSource() {
+  try {
+    if (!dataSource.isInitialized) {
+      await dataSource.initialize();
+    }
+    return dataSource;
+  } catch (error) {
+    console.error('Error during Data Source initialization:', error);
+    throw error;
+  }
+}
 
 export default dataSource;
