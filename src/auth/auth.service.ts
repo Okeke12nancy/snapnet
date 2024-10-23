@@ -1,12 +1,14 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '../user/user.service';
+// import { UserService } from '../user/user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { CustomHttpException } from '../helpers/custom-http-filter';
-import SYS_MSG from '../helpers/SystemMessages';
-
+import UserService from 'src/user/user.service';
+// import SYS_MSG from '../helpers/SystemMessages';
+export const USER_CREATED_SUCCESSFULLY = 'User Created Successfully';
+export const INVALID_CREDENTIALS = 'Invalid credentials';
 @Injectable()
 export class AuthService {
   constructor(
@@ -18,7 +20,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     createUserDto.password = hashedPassword;
     await this.userService.createUser(createUserDto);
-    return { message: SYS_MSG.USER_CREATED_SUCCESSFULLY };
+    return { message: USER_CREATED_SUCCESSFULLY };
   }
 
   async login(loginDto: LoginDto) {
@@ -29,7 +31,7 @@ export class AuthService {
 
     if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
       throw new CustomHttpException(
-        SYS_MSG.INVALID_CREDENTIALS,
+        INVALID_CREDENTIALS,
         HttpStatus.UNAUTHORIZED,
       );
     }
@@ -42,8 +44,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
+        name: user.name,
       },
     };
   }
