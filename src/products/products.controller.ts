@@ -27,14 +27,18 @@ import { Product } from './entities/product.entity';
 
 @ApiBearerAuth()
 @ApiTags('Products')
-@Controller('organizations')
+@Controller('')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @UseGuards()
-  @Post('/:orgId/products')
+  @Post('/:userId/products')
   @ApiOperation({ summary: 'Creates a new product' })
-  @ApiParam({ name: 'orgId', description: 'Organization ID', example: '12345' })
+  @ApiParam({
+    name: 'product name',
+    description: 'new product',
+    example: '12345',
+  })
   @ApiBody({
     type: CreateProductRequestDto,
     description: 'Details of the product to be created',
@@ -52,7 +56,7 @@ export class ProductsController {
     return await this.productsService.createProduct(createProductDto);
   }
 
-  @Get('/:productID:/products/search')
+  @Get('/:userId/products/search')
   @ApiOperation({ summary: 'Search for products' })
   @ApiParam({ name: 'product', description: 'product', example: '12345' })
   @ApiResponse({
@@ -75,7 +79,7 @@ export class ProductsController {
     });
   }
 
-  @Get('/:orgId/products/:productId')
+  @Get('/:userId/products/:productId')
   @ApiOperation({ summary: 'Get a product by ID' })
   @ApiParam({ name: 'orgId', description: 'Organization ID', example: '12345' })
   @ApiParam({
@@ -95,7 +99,7 @@ export class ProductsController {
   }
 
   @UseGuards()
-  @Patch('/:orgId/products/:productId')
+  @Patch('/:userId/products/:productId')
   @HttpCode(200)
   @ApiOperation({ summary: 'Update a product' })
   @ApiParam({ name: 'orgId', description: 'Organization ID', example: '12345' })
@@ -127,7 +131,7 @@ export class ProductsController {
   }
 
   @UseGuards()
-  @Delete('/:orgId/products/:productId')
+  @Delete('/:userId/products/:productId')
   @ApiOperation({ summary: 'Delete a product' })
   @ApiParam({ name: 'orgId', description: 'Organization ID', example: '12345' })
   @ApiParam({
@@ -140,7 +144,7 @@ export class ProductsController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async deleteProduct(
-    @Param('orgId') orgId: string,
+    @Param('userId') orgId: string,
     @Param('productId') productId: string,
   ): Promise<void> {
     await this.productsService.deleteProduct(orgId, productId);

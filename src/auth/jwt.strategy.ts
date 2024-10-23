@@ -5,7 +5,7 @@ import UserService from 'src/user/user.service';
 import { JwtPayload } from './jwt-payload-interface';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -14,13 +14,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
+    console.log(payload);
     const user = await this.userService.getUserRecord({
       identifier: payload.email,
       identifierType: 'email',
     });
+    console.log(user);
     if (!user) {
       throw new UnauthorizedException();
+
+      return user;
     }
-    return user;
   }
 }

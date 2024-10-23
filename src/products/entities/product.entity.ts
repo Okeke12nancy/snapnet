@@ -23,7 +23,7 @@ export class Product {
   @Column({ type: 'int' })
   quantity: number;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   imageUrl: string;
 
   @CreateDateColumn()

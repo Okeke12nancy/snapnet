@@ -31,6 +31,6 @@ export class Order {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.orders, { eager: true })
+  @ManyToOne(() => User, (user) => user.orders)
   user: User;
 }

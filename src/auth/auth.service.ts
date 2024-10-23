@@ -35,7 +35,10 @@ export class AuthService {
     }
 
     const payload = { email: user.email, id: user.id };
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      secret: '1234nncy2888788888&&&&***',
+      expiresIn: '2h',
+    });
 
     return {
       access_token: accessToken,

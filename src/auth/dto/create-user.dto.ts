@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDTO {
   @ApiProperty({
@@ -15,15 +22,7 @@ export class CreateUserDTO {
   })
   @IsNotEmpty()
   @IsString()
-  first_name: string;
-
-  @ApiProperty({
-    description: 'The last name of the user',
-    example: 'Doe',
-  })
-  @IsNotEmpty()
-  @IsString()
-  last_name: string;
+  name: string;
 
   @ApiProperty({
     description:
@@ -39,16 +38,7 @@ export class CreateUserDTO {
     {
       message:
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
-    }
+    },
   )
   password: string;
-
-  @ApiProperty({
-    description: 'An optional admin secret for elevated permissions',
-    example: 'admin123',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  admin_secret?: string;
 }

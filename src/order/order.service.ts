@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderRequestDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
-import { Order } from './entities/order.entity'; // Adjust path as necessary
+import { Order } from './entities/order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -18,7 +18,7 @@ export class OrdersService {
   ): Promise<Order> {
     const order = this.orderRepository.create({
       ...createOrderDto,
-      user: { id: userId }, // Setting the user relation
+      user: { id: userId },
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -27,7 +27,7 @@ export class OrdersService {
 
   async getOrderHistory(userId: string): Promise<Order[]> {
     return await this.orderRepository.find({
-      where: { user: { id: userId } }, // Adjusted to filter by userId
+      where: { user: { id: userId } },
     });
   }
 
@@ -37,7 +37,7 @@ export class OrdersService {
     updateOrderStatusDto: UpdateOrderStatusDto,
   ): Promise<Order> {
     const order = await this.orderRepository.findOne({
-      where: { id: orderId, user: { id: userId } }, // Adjusted to filter by userId
+      where: { id: orderId, user: { id: userId } },
     });
 
     if (!order) {
@@ -52,7 +52,7 @@ export class OrdersService {
 
   async deleteOrder(userId: string, orderId: string): Promise<void> {
     const order = await this.orderRepository.findOne({
-      where: { id: orderId, user: { id: userId } }, // Adjusted to filter by userId
+      where: { id: orderId, user: { id: userId } },
     });
 
     if (!order) {

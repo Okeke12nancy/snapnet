@@ -4,10 +4,10 @@ import { OrdersController } from './order.controller';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
-// import { OrderRepository } from './order.repository';
+import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [TypeOrmModule.forFeature([Order])],
-  providers: [OrdersService],
+  providers: [OrdersService, JwtService],
   controllers: [OrdersController],
   exports: [OrdersService],
 })

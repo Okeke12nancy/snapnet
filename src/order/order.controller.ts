@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -24,17 +26,18 @@ import { CreateOrderRequestDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { OrdersService } from '../order/order.service';
 import { Order } from './entities/order.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
 
-@ApiBearerAuth()
+@ApiBearerAuth('jwt')
 @ApiTags('Orders')
-@Controller('organizations')
+@Controller('')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @UseGuards()
-  @Post('/:orgId/orders')
+  @UseGuards(AuthGuard)
+  @Post('/:productId/orders')
   @ApiOperation({ summary: 'Place a new order' })
-  @ApiParam({ name: 'orgId', description: 'Organization ID', example: '12345' })
+  @ApiParam({ name: 'product Id', description: 'product ID', example: '12345' })
   @ApiBody({
     type: CreateOrderRequestDto,
     description: 'Details of the order to be created',
@@ -47,10 +50,11 @@ export class OrdersController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async createOrder(
-    @Param('orgId') orgId: string,
     @Body() createOrderDto: CreateOrderRequestDto,
+    @Request() req: any,
   ): Promise<Order> {
-    return await this.ordersService.createOrder(orgId, createOrderDto);
+    console.log(req);
+    return await this.ordersService.createOrder(req.user.id, createOrderDto);
   }
 
   @UseGuards()

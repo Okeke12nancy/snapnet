@@ -11,6 +11,7 @@ import { OrdersController } from './order/order.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import dataSource from './database/data-source';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           autoLoadEntities: true,
           migrationsRun: false,
           logging: true,
-          // synchronize: true,
+          synchronize: true,
           // ssl: {
           //   rejectUnauthorized: false,
           // },
@@ -46,6 +47,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ProductsController,
     OrdersController,
   ],
-  providers: [AppService],
+  providers: [AppService, JwtService],
 })
 export class AppModule {}
