@@ -1,12 +1,10 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-// import { UserService } from '../user/user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { CustomHttpException } from '../helpers/custom-http-filter';
 import UserService from 'src/user/user.service';
-// import SYS_MSG from '../helpers/SystemMessages';
 export const USER_CREATED_SUCCESSFULLY = 'User Created Successfully';
 export const INVALID_CREDENTIALS = 'Invalid credentials';
 @Injectable()

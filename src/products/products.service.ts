@@ -13,22 +13,18 @@ export class ProductsService {
   ) {}
 
   async createProduct(
-    orgId: string,
     createProductDto: CreateProductRequestDto,
   ): Promise<Product> {
     const product = this.productRepository.create({ ...createProductDto });
     return await this.productRepository.save(product);
   }
 
-  async searchProducts(
-    orgId: string,
-    filters: {
-      name?: string;
-      category?: string;
-      minPrice?: number;
-      maxPrice?: number;
-    },
-  ): Promise<Product[]> {
+  async searchProducts(filters: {
+    name?: string;
+    category?: string;
+    minPrice?: number;
+    maxPrice?: number;
+  }): Promise<Product[]> {
     const queryBuilder = this.productRepository.createQueryBuilder('product');
 
     if (filters.name) {
@@ -61,7 +57,6 @@ export class ProductsService {
   }
 
   async updateProduct(
-    orgId: string,
     productId: string,
     updateProductDto: UpdateProductDTO,
   ): Promise<Product> {

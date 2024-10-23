@@ -23,7 +23,7 @@ import {
 import { CreateProductRequestDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 import { UpdateProductDTO } from './dto/update-product.dto';
-import { Product } from './entities/product.entity'; // Ensure this path is correct
+import { Product } from './entities/product.entity';
 
 @ApiBearerAuth()
 @ApiTags('Products')
@@ -47,15 +47,14 @@ export class ProductsController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async createProduct(
-    @Param('orgId') orgId: string,
     @Body() createProductDto: CreateProductRequestDto,
   ): Promise<Product> {
-    return await this.productsService.createProduct(orgId, createProductDto);
+    return await this.productsService.createProduct(createProductDto);
   }
 
-  @Get('/:orgId/products/search')
+  @Get('/:productID:/products/search')
   @ApiOperation({ summary: 'Search for products' })
-  @ApiParam({ name: 'orgId', description: 'Organization ID', example: '12345' })
+  @ApiParam({ name: 'product', description: 'product', example: '12345' })
   @ApiResponse({
     status: 200,
     description: 'Products found successfully',
@@ -65,12 +64,11 @@ export class ProductsController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async searchProducts(
-    @Param('orgId') orgId: string,
     @Query('name') name?: string,
     @Query('minPrice') minPrice?: number,
     @Query('maxPrice') maxPrice?: number,
   ): Promise<Product[]> {
-    return await this.productsService.searchProducts(orgId, {
+    return await this.productsService.searchProducts({
       name,
       minPrice,
       maxPrice,
@@ -92,10 +90,7 @@ export class ProductsController {
   })
   @ApiResponse({ status: 404, description: 'Product not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
-  async getById(
-    @Param('orgId') orgId: string,
-    @Param('productId') productId: string,
-  ): Promise<Product> {
+  async getById(@Param('productId') productId: string): Promise<Product> {
     return await this.productsService.getProductById(productId);
   }
 
@@ -122,12 +117,10 @@ export class ProductsController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async updateProduct(
-    @Param('orgId') orgId: string,
     @Param('productId') productId: string,
     @Body() updateProductDto: UpdateProductDTO,
   ): Promise<Product> {
     return await this.productsService.updateProduct(
-      orgId,
       productId,
       updateProductDto,
     );

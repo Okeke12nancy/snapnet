@@ -8,9 +8,17 @@ import { ProductsController } from './products/products.controller';
 import { ProductsModule } from './products/products.module';
 import { UserController } from './user/user.controller';
 import { OrdersController } from './order/order.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import dataSource from './database/data-source';
 
 @Module({
-  imports: [AuthModule, UserModule, OrderModule, ProductsModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    OrderModule,
+    ProductsModule,
+    TypeOrmModule.forRoot(),
+  ],
   controllers: [
     AppController,
     UserController,
