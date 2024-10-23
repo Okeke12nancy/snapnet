@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
-
+    console.log('THIS IS THE TOKEN', { token });
     const isPublicRoute = this.reflector.getAllAndOverride<boolean>(
       IS_PUBLIC_KEY,
       [context.getHandler(), context.getClass()],
@@ -39,12 +39,12 @@ export class AuthGuard implements CanActivate {
       );
     }
 
-    const payload = await this.jwtService
-      .verifyAsync(token, {
-        secret: appConfig().jwtSecret,
-      })
-      .catch((err) => null);
+    console.log('THIS IS JWT SECRET', { secret: appConfig().jwtSecret });
+    const payload = await this.jwtService.verifyAsync(token, {
+      secret: appConfig().jwtSecret,
+    });
 
+    console.log({ payload });
     if (!payload)
       throw new CustomHttpException(
         SYS_MSG.UNAUTHENTICATED_MESSAGE,

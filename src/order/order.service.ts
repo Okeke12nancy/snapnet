@@ -32,12 +32,11 @@ export class OrdersService {
   }
 
   async updateOrderStatus(
-    userId: string,
     orderId: string,
     updateOrderStatusDto: UpdateOrderStatusDto,
   ): Promise<Order> {
     const order = await this.orderRepository.findOne({
-      where: { id: orderId, user: { id: userId } },
+      where: { id: orderId },
     });
 
     if (!order) {

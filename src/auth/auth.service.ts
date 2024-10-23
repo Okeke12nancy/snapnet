@@ -4,6 +4,8 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { CustomHttpException } from '../helpers/custom-http-filter';
+import appConfig from '../../config/auth.config';
+
 import UserService from 'src/user/user.service';
 export const USER_CREATED_SUCCESSFULLY = 'User Created Successfully';
 export const INVALID_CREDENTIALS = 'Invalid credentials';
@@ -36,10 +38,9 @@ export class AuthService {
 
     const payload = { email: user.email, id: user.id };
     const accessToken = this.jwtService.sign(payload, {
-      secret: '1234nncy2888788888&&&&***',
-      expiresIn: '2h',
+      secret: appConfig().jwtSecret,
+      expiresIn: '24h',
     });
-
     return {
       access_token: accessToken,
       user: {
